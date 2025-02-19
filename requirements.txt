@@ -1,0 +1,6 @@
+flask
+requests
+google-generativeai
+python-dotenv
+tiktoken 
+werkzeug

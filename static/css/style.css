@@ -1,0 +1,638 @@
+:root {
+    /* Light theme variables */
+    --primary-light: #f8f9fa;
+    --secondary-light: #e9ecef;
+    --accent-light: #00ADB5;
+    --neutral-light: #393E46;
+    --text-dark-light: #222831;
+    --text-light-light: #393E46;
+    --star-color-light: #393E46;
+    --code-bg-light: rgba(34, 40, 49, 0.05);
+    --code-border-light: rgba(0, 173, 181, 0.2);
+    
+    /* Dark theme variables */
+    --primary-dark: #181C14;
+    --secondary-dark: #3C3D37;
+    --accent-dark: #697565;
+    --neutral-dark: #ECDFCC;
+    --code-bg-dark: rgba(34, 40, 49, 0.8);
+    --code-border-dark: rgba(0, 173, 181, 0.3);
+    --text-dark-dark: #ECDFCC;
+    --text-light-dark: #ECDFCC;
+    --star-color-dark: #ECDFCC;
+    
+    /* Glass effect variables */
+    --glass-blur: 12px;
+    --glass-opacity-light: 0.7;
+    --glass-opacity-dark: 0.8;
+    --blur-amount: var(--glass-blur);
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --glass-bg-light: rgba(255, 255, 255, 0.25);
+    --glass-bg-dark: rgba(24, 28, 20, 0.25);
+    --glass-border-light: rgba(255, 255, 255, 0.3);
+    --glass-border-dark: rgba(255, 255, 255, 0.1);
+}
+
+body.light-mode {
+    --primary: var(--primary-light);
+    --secondary: var(--secondary-light);
+    --accent: var(--accent-light);
+    --neutral: var(--neutral-light);
+    --warning: var(--warning-light);
+    --text-dark: var(--text-dark-light);
+    --text-light: var(--text-light-light);
+    --text-subtle: var(--text-subtle-light);
+    --text-highlight: var(--text-highlight-light);
+    --glass-bg: var(--glass-bg-light);
+    --glass-border: var(--glass-border-light);
+    --star-color: var(--star-color-light);
+}
+
+body.dark-mode {
+    --primary: var(--primary-dark);
+    --secondary: var(--secondary-dark);
+    --accent: var(--accent-dark);
+    --neutral: var(--neutral-dark);
+    --warning: var(--warning-dark);
+    --text-dark: var(--text-dark-dark);
+    --text-light: var(--text-light-dark);
+    --text-subtle: var(--text-subtle-dark);
+    --text-highlight: var(--text-highlight-dark);
+    --glass-bg: var(--glass-bg-dark);
+    --glass-border: var(--glass-border-dark);
+    --star-color: var(--star-color-dark);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: var(--text-light);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1rem;
+}
+
+/* Glass Container */
+.glass-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
+    z-index: 1;
+    position: relative;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark Mode Toggle Button */
+.mode-toggle,
+#clearChatButton,
+.send-button {
+    background: var(--accent);
+    border: none;
+    color: var(--primary); /* Changed to primary for light mode visibility */
+    transition: all 0.3s ease;
+}
+
+.mode-toggle:hover,
+#clearChatButton:hover,
+.send-button:hover {
+    background: var(--warning);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Starfall Animation */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1; /* Ensure stars appear behind content */
+    background: transparent;
+}
+
+.star {
+    position: absolute;
+    width: 3px;   /* Increased size */
+    height: 3px;  /* Increased size */
+    background: var(--star-color);
+    border-radius: 50%;
+    animation: starfall linear infinite;
+}
+
+@keyframes starfall {
+    0% {
+        transform: translateY(-100vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) translateX(20px);
+        opacity: 0;
+    }
+}
+
+/* Chat Messages */
+.chat-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 20px;
+    scroll-behavior: smooth;
+    margin-bottom: 1rem;
+    scroll-padding-bottom: 20px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Message Improvements */
+.message {
+    max-width: 85%;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.message.user {
+    margin-left: auto;
+    background: rgba(0, 173, 181, 0.1);
+    border-radius: 15px 15px 5px 15px;
+}
+
+.message.assistant {
+    margin-right: auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px 15px 15px 5px;
+}
+
+.message-content {
+    padding: 15px;
+    border-radius: inherit;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.message .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    background: var(--accent);
+    border: none;
+    color: var(--text-light);
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.message.assistant .delete-btn {
+    right: auto;
+    left: 5px;
+}
+
+.message:hover .delete-btn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delete-btn:hover {
+    background: var(--warning);
+    transform: scale(1.1);
+}
+
+/* Add Stop Response Button Styling */
+.stop-response {
+    position: absolute !important;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--warning) !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: white !important;
+    transition: all 0.2s ease !important;
+    z-index: 10;
+}
+
+.stop-response:hover {
+    transform: scale(1.1);
+    background: #dc3545 !important;
+}
+
+/* Update Stop Response Button Styling */
+.message.typing {
+    position: relative;
+}
+
+.stop-response {
+    position: absolute !important;
+    top: -10px;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #dc3545 !important;
+    border: 2px solid var(--glass-border) !important;
+    border-radius: 50% !important;
+    color: white !important;
+    transition: all 0.2s ease !important;
+    z-index: 100;
+    opacity: 1 !important;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.stop-response:hover {
+    transform: scale(1.1);
+    background: #bb2d3b !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Input Area */
+.input-area {
+    position: sticky;
+    bottom: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    padding: 15px;
+    z-index: 10;
+    margin-top: auto;
+}
+
+.input-area textarea {
+    background: rgba(34, 40, 49, 0.6);
+    border: none;
+    color: var(--text-light); /* Ensure text is readable */
+    font-weight: 500;
+    resize: none;
+    min-height: 50px;
+    max-height: 150px;
+}
+
+.input-area textarea::placeholder {
+    color: var(--text-subtle);
+    opacity: 0.8;
+}
+
+.input-area textarea:focus {
+    background: rgba(57, 62, 70, 0.4);
+    box-shadow: 0 0 0 2px rgba(0, 173, 181, 0.2);
+    color: var(--text-light); /* Ensure text is readable */
+}
+
+/* Token Display */
+.token-display {
+    font-size: 0.8rem;
+    color: var(--text-highlight);
+    font-weight: 500;
+    padding: 8px 12px;
+    background: rgba(57, 62, 70, 0.3);
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* Animations */
+@keyframes messageAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(57, 62, 70, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 173, 181, 0.3);
+    border-radius: 3px;
+}
+
+/* Markdown Styles */
+.message-content strong {
+    color: var(--accent);
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.message-content em {
+    color: var(--text-highlight);
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.message-content code {
+    font-family: 'Consolas', monospace;
+    font-size: 0.9em;
+}
+
+/* Enhanced Code Block Styling */
+.message-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 1em 0;
+    padding: 1em;
+    background: rgba(34, 40, 49, 0.8) !important;
+    border-radius: 8px;
+    tab-size: 4;
+    border: 1px solid var(--accent);
+    overflow-x: auto;
+}
+
+.message-content pre code {
+    background: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    display: block;
+    line-height: 1.5;
+    color: #e6e6e6;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+}
+
+/* Inline code styling */
+.message-content code:not(pre code) {
+    background: rgba(34, 40, 49, 0.5);
+    color: var(--accent);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    border: 1px solid rgba(0, 173, 181, 0.2);
+}
+
+/* Preserve line breaks in regular text */
+.message-content br {
+    display: block;
+    content: "";
+    margin: 0.5em 0;
+}
+
+.message-content a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    font-weight: 600;
+}
+
+.message-content a:hover {
+    color: var(--text-light);
+    border-color: currentColor;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .chat-container {
+        padding: 10px;
+    }
+    
+    .message {
+        max-width: 95%;
+    }
+}
+
+/* Transitions */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.glass-container,
+.message-content,
+.input-area {
+    transition: background-color 0.3s ease, 
+                border-color 0.3s ease, 
+                box-shadow 0.3s ease;
+}
+
+/* Message Animations */
+.message-animate {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.15s ease, transform 0.15s ease; /* Reduced from 0.3s */
+}
+
+.message-animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Typing Indicator Animation */
+.typing-indicator {
+    display: flex;
+    gap: 8px;  /* Increased from 4px */
+    padding: 12px !important;
+    min-width: 100px;
+    justify-content: center;
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.typing-dot {
+    width: 12px;  /* Increased from 10px */
+    height: 12px; /* Increased from 10px */
+    border-radius: 50%;
+    opacity: 0;
+    animation: typingDot 1s infinite;
+}
+
+body.light-mode .typing-dot {
+    background-color: #222831 !important; /* Force black color in light mode */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .typing-dot {
+    background-color: #ffffff !important; /* Force white color in dark mode */
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0.2s; }
+.typing-dot:nth-child(2) { animation-delay: 0.4s; }
+.typing-dot:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes typingDot {
+    0% { 
+        opacity: 0.2;
+        transform: scale(0.8);
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1.2);
+        box-shadow: 0 0 10px var(--accent);
+    }
+    100% { 
+        opacity: 0.2;
+        transform: scale(0.8);
+    }
+}
+
+/* Improve message appearance during typing */
+.message.assistant.typing {
+    opacity: 1;
+    transform: none;
+}
+
+.message.assistant .message-content:after {
+    display: none; /* Remove the cursor animation */
+}
+
+/* Cursor Animation for Typing Effect */
+.message.assistant .message-content {
+    position: relative;
+}
+
+.message.assistant .message-content:after {
+    content: '|';
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    animation: cursor 0.5s infinite; /* Reduced from 1s to 0.5s */
+    margin-left: 2px;
+}
+
+/* Add Import/Export Button Styling */
+#exportChatButton,
+#importChatButton {
+    min-width: 100px;
+}
+
+@keyframes cursor {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* Update Import/Export Button Styling */
+#exportChatButton,
+#importChatButton,
+#clearChatButton {
+    min-width: 100px;
+    color: var(--text-dark) !important;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+}
+
+body.light-mode #exportChatButton,
+body.light-mode #importChatButton,
+body.light-mode #clearChatButton {
+    background: var(--accent) !important;
+    color: white !important;
+}
+
+body.dark-mode #exportChatButton,
+body.dark-mode #importChatButton,
+body.dark-mode #clearChatButton {
+    background: var(--accent) !important;
+    color: var(--primary) !important;
+}
+
+#exportChatButton:hover,
+#importChatButton:hover,
+#clearChatButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: var(--warning) !important;
+}
+
+/* Remove Image Upload Styling */
+.upload-btn,
+.image-preview {
+    display: none;
+}
+
+/* Add Image Upload Styling */
+.input-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+
+.upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-btn:hover {
+    background: var(--warning);
+    transform: translateY(-1px);
+}
+
+.image-preview {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: contain;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 2px solid var(--accent);
+}
