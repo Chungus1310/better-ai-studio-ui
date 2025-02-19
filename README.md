@@ -43,7 +43,8 @@ Visit http://localhost:5000 in your browser
 
 ## 🖥️ Interface Overview
 
-![Interface Preview](https://via.placeholder.com/600x400.png?text=Interface+Preview+Coming+Soon)
+![Interface Preview](https://github.com/user-attachments/assets/c6be62c5-544a-4c0c-a3e6-0fd03b638999)
+
 
 - Real-time message animations
 - Typing indicators
